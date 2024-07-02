@@ -69,7 +69,7 @@ const DissolvedOxygen = () => {
 
   const fetchData = () => {
     // Replace with your actual Mocky API call
-    fetch('https://run.mocky.io/v3/1aacb0d3-af27-481e-aebd-9744eb218626')
+    fetch('https://run.mocky.io/v3/0805682e-dfe0-42cd-9bac-9aa8f6581a9e')
       .then((response) => response.json())
       .then((data) => setPonds(data.ponds))
       .catch((error) => console.error('Error fetching data:', error));
