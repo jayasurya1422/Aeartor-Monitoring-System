@@ -129,7 +129,7 @@ const Dashboard = () => {
         </Brand>
         <div>
           <NavLink href="#">Aerators</NavLink>
-          <NavLink href="#">Dissolved Oxygen</NavLink>
+          <NavLink href="./DissolvedOxygen">Dissolved Oxygen</NavLink>
           <NavLink href="#">Contact</NavLink>
         </div>
       </Navbar>
