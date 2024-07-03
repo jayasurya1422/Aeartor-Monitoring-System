@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
-import 'chart.js/auto'; // Make sure to import 'chart.js/auto' for Chart.js v3 compatibility
-
+import 'chart.js/auto';
 import styled from 'styled-components';
 
 const DashboardContainer = styled.div`
@@ -16,7 +15,7 @@ const Navbar = styled.nav`
   justify-content: space-between;
   align-items: center;
   font-size: 1.2rem;
-  border-bottom: 1px solid black; /* Add border to bottom only */
+  border-bottom: 1px solid black;
 `;
 
 const Brand = styled.a`
@@ -31,7 +30,7 @@ const NavLink = styled.a`
   color: black;
   text-decoration: none;
   padding: 5px 10px;
-  margin: 0 ;
+  margin: 0;
   border-radius: 5px;
   &:hover {
     background-color: #f0f0f0;
@@ -40,8 +39,9 @@ const NavLink = styled.a`
 
 const CardContainer = styled.div`
   display: flex;
-  overflow-x: auto; /* Allow horizontal scrolling */
-  padding: 10px;
+  flex-wrap: wrap; /* Allow multiple rows of cards */
+  gap: 20px; /* Space between cards */
+  justify-content: center; /* Center align cards horizontally */
 `;
 
 const Card = styled.div`
@@ -50,16 +50,27 @@ const Card = styled.div`
   margin: 10px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 300px; /* Default width for cards */
+  width: 300px;
   flex: 0 0 auto;
   transition: transform 0.3s ease-in-out;
+  cursor: pointer;
 
   &:hover {
     transform: translateY(-5px);
   }
 
-  ${(props) => props.isSelected && `
-    width: 400px; /* Increase width for selected card */
+  ${(props) =>
+    !props.isSelected &&
+    `
+    opacity: 0.7; /* Dim cards that are not selected */
+    height: 100px; /* Adjusted height for collapsed state */
+    overflow: hidden; /* Hide overflow content */
+  `}
+
+  ${(props) =>
+    props.isSelected &&
+    `
+    height: auto; /* Allow card to expand to fit content */
   `}
 `;
 
@@ -69,11 +80,9 @@ const PieChartContainer = styled.div`
   margin: 0 auto;
 `;
 
-
-
 const Dashboard = () => {
   const [ponds, setPonds] = useState([]);
-  const [selectedPondId, setSelectedPondId] = useState(null); // Track selected pond ID
+  const [selectedPondId, setSelectedPondId] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -81,14 +90,14 @@ const Dashboard = () => {
 
   const fetchData = () => {
     // Replace with your actual API call to fetch pond data
-    fetch('https://run.mocky.io/v3/66fff295-a273-4d55-ab58-c053d199a6c3')
-      .then(response => response.json())
-      .then(data => setPonds(data.ponds))
-      .catch(error => console.error('Error fetching data:', error));
+    fetch('https://run.mocky.io/v3/0805682e-dfe0-42cd-9bac-9aa8f6581a9e')
+      .then((response) => response.json())
+      .then((data) => setPonds(data.ponds))
+      .catch((error) => console.error('Error fetching data:', error));
   };
 
   const handlePondClick = (pondId) => {
-    setSelectedPondId(pondId === selectedPondId ? null : pondId);
+    setSelectedPondId((prevId) => (prevId === pondId ? null : pondId));
   };
 
   const getPieData = (current) => {
@@ -129,15 +138,15 @@ const Dashboard = () => {
         </Brand>
         <div>
           <NavLink href="#">Aerators</NavLink>
-          <NavLink href="#">Dissolved Oxygen</NavLink>
+          <NavLink href="./DissolvedOxygen">Dissolved Oxygen</NavLink>
           <NavLink href="#">Contact</NavLink>
         </div>
       </Navbar>
       <br />
       <CardContainer>
         {ponds.map((pond) => (
-          <Card key={pond.id} isSelected={selectedPondId === pond.id}>
-            <h3 onClick={() => handlePondClick(pond.id)} style={{ cursor: 'pointer' }}>{pond.name}</h3>
+          <Card key={pond.id} isSelected={selectedPondId === pond.id} onClick={() => handlePondClick(pond.id)}>
+            <h3>{pond.name}</h3>
             {selectedPondId === pond.id && (
               <>
                 <h4>Aerators</h4>
