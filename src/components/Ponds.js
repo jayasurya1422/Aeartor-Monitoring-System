@@ -5,6 +5,12 @@ import { Link } from 'react-router-dom';
 const PondsContainer = styled.div`
   padding: 20px;
   background-color: #f0f0f0;
+  min-height: 100vh;
+`;
+
+const Heading = styled.h2`
+  font-size: 2.5rem;
+  margin-bottom: 10px;
 `;
 
 const PondList = styled.ul`
@@ -33,6 +39,20 @@ const PondLink = styled(Link)`
   font-weight: 500;
 `;
 
+const AddPondButton = styled.button`
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #45a049;
+  }
+`;
+
 const Ponds = () => {
   const [ponds, setPonds] = useState([]);
 
@@ -44,9 +64,21 @@ const Ponds = () => {
       .catch((error) => console.error('Error fetching data:', error));
   }, []);
 
+  const handleAddPond = () => {
+    // Logic to add a new pond
+    const newPondId = ponds.length + 1;
+    const newPond = {
+      id: newPondId,
+      name: `Pond ${newPondId}`,
+      aerators: [],
+    };
+
+    setPonds((prevPonds) => [...prevPonds, newPond]);
+  };
+
   return (
     <PondsContainer>
-      <h2>Available Ponds</h2>
+      <Heading>Ponds</Heading>
       <PondList>
         {ponds.map((pond) => (
           <PondItem key={pond.id}>
@@ -54,6 +86,7 @@ const Ponds = () => {
           </PondItem>
         ))}
       </PondList>
+      <AddPondButton onClick={handleAddPond}>Add Pond</AddPondButton>
     </PondsContainer>
   );
 };
