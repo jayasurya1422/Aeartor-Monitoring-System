@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
@@ -40,34 +40,50 @@ const PieChartContainer = styled.div`
   margin: 0 auto;
 `;
 
-const AddAeratorButton = styled.button`
-  margin-top: 10px;
-  padding: 8px 16px;
-  background-color: #4CAF50;
+const DOButton = styled(Link)`
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #36A2EB;
   color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  display: inline-block;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #258cd1;
+  }
+`;
+
+const BackButton = styled.button`
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #ccc;
+  color: black;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: #45a049;
+    background-color: #bbb;
   }
 `;
 
 const PondDetail = () => {
   const { pondId } = useParams();
+  const navigate = useNavigate();
   const [pond, setPond] = useState(null);
-  const [dissolvedOxygen, setDissolvedOxygen] = useState(null);
 
   useEffect(() => {
     // Fetch pond details and dissolved oxygen from your API using pondId
     fetch(`https://run.mocky.io/v3/0805682e-dfe0-42cd-9bac-9aa8f6581a9e`)
       .then((response) => response.json())
       .then((data) => {
+        console.log("Fetched data: ", data); // Add this line to log fetched data
         const foundPond = data.ponds.find((p) => p.id === parseInt(pondId));
+        console.log("Found Pond: ", foundPond); // Add this line to log the specific pond data
         setPond(foundPond);
-        setDissolvedOxygen(data.dissolvedOxygen[pondId]); // Assuming dissolvedOxygen is fetched along with ponds
       })
       .catch((error) => console.error('Error fetching data:', error));
   }, [pondId]);
@@ -102,20 +118,6 @@ const PondDetail = () => {
     },
   };
 
-  const handleAddAerator = () => {
-    // Implement logic to add a new aerator to the pond
-    const newAeratorId = pond.aerators.length + 1;
-    const newAerator = {
-      id: newAeratorId,
-      current: Math.floor(Math.random() * 30) + 1, // Random current value for demonstration
-    };
-
-    setPond((prevPond) => ({
-      ...prevPond,
-      aerators: [...prevPond.aerators, newAerator],
-    }));
-  };
-
   return (
     <PondDetailContainer>
       {pond ? (
@@ -138,13 +140,8 @@ const PondDetail = () => {
               <p>No aerators found for this pond.</p>
             )}
           </AeratorList>
-          <AddAeratorButton onClick={handleAddAerator}>Add Aerator</AddAeratorButton>
-          {dissolvedOxygen !== null && (
-            <div>
-              <h3 className='text-2xl'>Dissolved Oxygen</h3>
-              <p>{dissolvedOxygen} mg/L</p>
-            </div>
-          )}
+          <DOButton to={`/dissolvedoxygen/${pondId}`}>View Dissolved Oxygen</DOButton>
+          <BackButton onClick={() => navigate('/dashboard')}>Return to Dashboard</BackButton>
         </>
       ) : (
         <p>Loading...</p>
