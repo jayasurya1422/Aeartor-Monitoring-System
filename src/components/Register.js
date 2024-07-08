@@ -1,5 +1,120 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled, { keyframes } from 'styled-components';
+
+const slideIn = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const RegisterContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #c1c1c1, #d1d1d1);
+`;
+
+const FormWrapper = styled.div`
+  max-width: 400px;
+  width: 100%;
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: ${slideIn} 1s ease-out;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Title = styled.h1`
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+  position: relative;
+
+  &::after {
+    content: '';
+    width: 60px;
+    height: 4px;
+    background: #666;
+    display: block;
+    margin: 10px auto 0;
+  }
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 20px;
+`;
+
+const Label = styled.label`
+  display: block;
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 5px;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #999;
+  border-radius: 5px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+
+  &:focus {
+    outline: none;
+    border-color: #666;
+    box-shadow: 0 0 0 3px rgba(102, 102, 102, 0.2);
+  }
+`;
+
+const Button = styled.button`
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: #666;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+
+  &:hover {
+    background-color: #444;
+    transform: translateY(-2px);
+  }
+`;
+
+const LoginLink = styled.p`
+  margin-top: 15px;
+  text-align: center;
+  color: #666;
+  font-size: 1rem;
+
+  a {
+    color: #444;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #222;
+      text-decoration: underline;
+    }
+  }
+`;
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -16,65 +131,56 @@ const Register = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600">
-      <div className="container max-w-sm mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <form onSubmit={handleSubmit}>
-          <h1 className="text-2xl font-bold mb-4 text-center text-gray-800">Register</h1>
-          <div className="mb-3">
-            <label htmlFor="name" className="block text-lg text-gray-700 font-medium mb-1">Name:</label>
-            <input
+    <RegisterContainer>
+      <FormWrapper>
+        <Form onSubmit={handleSubmit}>
+          <Title>Register</Title>
+          <FormGroup>
+            <Label htmlFor="name">Name:</Label>
+            <Input
               type="text"
               name="name"
               id="name"
               required
               placeholder="Enter your name"
               autoComplete="name"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="email" className="block text-lg text-gray-700 font-medium mb-1">Email:</label>
-            <input
+          </FormGroup>
+          <FormGroup>
+            <Label htmlFor="email">Email:</Label>
+            <Input
               type="email"
               name="email"
               id="email"
               required
               placeholder="Enter your email"
               autoComplete="off"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="password" className="block text-lg text-gray-700 font-medium mb-1">Password:</label>
-            <input
+          </FormGroup>
+          <FormGroup>
+            <Label htmlFor="password">Password:</Label>
+            <Input
               type="password"
               name="password"
               id="password"
               required
               placeholder="Enter your password"
               autoComplete="new-password"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-          </div>
-          
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-200 font-semibold text-lg"
-          >
-            Register
-          </button>
-          <p className="mt-3 text-center text-gray-700 text-lg">
-            Already have an account? <a href="/login" className="text-blue-500 hover:underline">Login</a>
-          </p>
-        </form>
-      </div>
-    </div>
+          </FormGroup>
+          <Button type="submit">Register</Button>
+          <LoginLink>
+            Already have an account? <a href="/login">Login</a>
+          </LoginLink>
+        </Form>
+      </FormWrapper>
+    </RegisterContainer>
   );
 };
 
